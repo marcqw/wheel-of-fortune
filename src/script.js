@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const segments = ["Prix 1", "Prix 2", "Prix 3", "Prix 4", "Prix 5", "Prix 6"];
     const colors = ["#FF0000", "#FF8000", "#FFFF00", "#80FF00", "#00FF00", "#00FF80"];
     let startAngle = 0;
-    let arc = Math.PI / (segments.length / 2);
+    const arc = Math.PI / (segments.length / 2);
     let spinTimeout = null;
     let spinAngleStart = 0;
     let spinTime = 0;
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
         context.lineWidth = 2;
 
         for (let i = 0; i < segments.length; i++) {
-            let angle = startAngle + i * arc;
+            const angle = startAngle + i * arc;
             context.fillStyle = colors[i];
             context.beginPath();
             context.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, angle, angle + arc, false);
