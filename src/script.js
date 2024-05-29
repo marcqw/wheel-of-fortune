@@ -2,12 +2,16 @@ document.addEventListener("DOMContentLoaded", function() {
     const canvas = document.getElementById("wheelCanvas");
     const context = canvas.getContext("2d");
     const spinButton = document.getElementById("spinButton");
+    const resultDiv = document.getElementById("result");
 
     const segments = ["Prix 1", "Prix 2", "Prix 3", "Prix 4", "Prix 5", "Prix 6"];
     const colors = ["#FF0000", "#FF8000", "#FFFF00", "#80FF00", "#00FF00", "#00FF80"];
     let startAngle = 0;
     let arc = Math.PI / (segments.length / 2);
     let spinTimeout = null;
+    let spinAngleStart = 0;
+    let spinTime = 0;
+    let spinTimeTotal = 0;
 
     function drawRouletteWheel() {
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -32,7 +36,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function rotateWheel() {
-        startAngle += 30 * Math.PI / 180;
+        spinTime += 30;
+        if (spinTime >= spinTimeTotal) {
+            stopRotateWheel();
+            return;
+        }
+        const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+        startAngle += (spinAngle * Math.PI / 180);
         drawRouletteWheel();
         spinTimeout = requestAnimationFrame(rotateWheel);
     }
@@ -40,12 +50,24 @@ document.addEventListener("DOMContentLoaded", function() {
     function stopRotateWheel() {
         cancelAnimationFrame(spinTimeout);
         spinTimeout = null;
+        const degrees = startAngle * 180 / Math.PI + 90;
+        const arcd = arc * 180 / Math.PI;
+        const index = Math.floor((360 - degrees % 360) / arcd);
+        resultDiv.innerText = "Résultat: " + segments[index];
+    }
+
+    function easeOut(t, b, c, d) {
+        t /= d;
+        t--;
+        return c * (t * t * t + 1) + b;
     }
 
     spinButton.addEventListener("click", function() {
         if (spinTimeout === null) {
+            spinAngleStart = Math.random() * 10 + 10;
+            spinTime = 0;
+            spinTimeTotal = Math.random() * 3000 + 4000;
             rotateWheel();
-            setTimeout(stopRotateWheel, 3000);
         }
     });
 
