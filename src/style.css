@@ -1,0 +1,19 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.wheel-container {
+    text-align: center;
+}
+
+#wheelCanvas {
+    border: 2px solid #000;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
